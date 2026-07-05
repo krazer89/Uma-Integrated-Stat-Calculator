@@ -32,7 +32,7 @@ use crate::{
 };
 
 type DialogTrainedCharacterDetailCreateSetupParameter =
-    unsafe extern "C" fn(*mut Il2CppObject, *mut c_char, *mut c_void, bool, bool, *mut MethodInfo);
+    unsafe extern "C" fn(*mut Il2CppObject, *mut c_char, *mut c_void, *mut MethodInfo,);
 type OnClickListItem = unsafe extern "C" fn(*mut Il2CppObject, *mut Il2CppObject, *mut MethodInfo);
 
 static mut VTABLE: Option<&'static Vtable> = None;
@@ -341,8 +341,6 @@ unsafe extern "C" fn dialog_trained_character_detail_create_setup_parameter_hook
     trained_chara_data: *mut Il2CppObject,
     trainer_name: *mut c_char,
     on_change_partner: *mut c_void,
-    is_single_mode: bool,
-    is_follow: bool,
     method_info: *mut MethodInfo,
 ) {
     unsafe {
@@ -371,8 +369,6 @@ unsafe extern "C" fn dialog_trained_character_detail_create_setup_parameter_hook
             trained_chara_data,
             trainer_name,
             on_change_partner,
-            is_single_mode,
-            is_follow,
             method_info,
         );
     }
@@ -695,7 +691,7 @@ pub unsafe extern "C" fn hachimi_init(vtable: *const Vtable, version: i32) -> In
         let orig_addr = get_method(
             get_gallop_class("DialogTrainedCharacterDetail"),
             "CreateSetupParameter",
-            5,
+            3,
         );
         (vtable.interceptor_hook)(
             interceptor,
@@ -758,6 +754,8 @@ pub unsafe extern "C" fn hachimi_init(vtable: *const Vtable, version: i32) -> In
             parts_single_mode_skill_upgrade_select_item_is_selected as *mut c_void,
         );
 
+        // Global doesn't have evolved skills, so we don't need this just yet :)
+        /*
         let orig_addr = get_method(
             get_gallop_class("DialogSingleModeSkillUpgradeSpecialitySelect"),
             "OnClickSkillUpgradeSpecialitySelectItem",
@@ -768,6 +766,7 @@ pub unsafe extern "C" fn hachimi_init(vtable: *const Vtable, version: i32) -> In
             orig_addr,
             dialog_single_mode_skill_upgrade_speciality_select_on_click_skill_upgrade_speciality_select_item_hook as *mut c_void,
         );
+        */
 
         log(0, "Hooking finished");
 
@@ -776,7 +775,7 @@ pub unsafe extern "C" fn hachimi_init(vtable: *const Vtable, version: i32) -> In
             std::mem::transmute(get_method(sprite_class, "get_name", 0));
         let ui_manager = UiManager::init();
         log(0, "Loading atlas");
-        let atlas_reference = AtlasReference::new(ui_manager.load_atlas(16, true));
+        let atlas_reference = AtlasReference::new(ui_manager.load_atlas(15, true));
         log(0, "Getting sprites");
         let rank_sprite_array = atlas_reference.get_sprites();
         log(0, "Iterating over sprites");
