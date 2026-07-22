@@ -775,7 +775,7 @@ pub unsafe extern "C" fn hachimi_init(vtable: *const Vtable, version: i32) -> In
             std::mem::transmute(get_method(sprite_class, "get_name", 0));
         let ui_manager = UiManager::init();
         log(0, "Loading atlas");
-        let atlas_reference = AtlasReference::new(ui_manager.load_atlas(15, true));
+        let atlas_reference = AtlasReference::new(ui_manager.load_atlas(16, true));
         log(0, "Getting sprites");
         let rank_sprite_array = atlas_reference.get_sprites();
         log(0, "Iterating over sprites");
